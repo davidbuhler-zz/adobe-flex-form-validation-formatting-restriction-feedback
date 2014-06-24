@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+/*
+ * #%L
+ * GwtBootstrap3
+ * %%
+ * Copyright (C) 2013 FormFunction
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+ --> 
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				layout="absolute"
+				width="400"
+				height="400"
+				title="What's this?"
+				close="handleClose(event);"
+				creationComplete="creationCompleteHandler(event);"
+				showCloseButton="true"
+				xmlns:containers="org.davidbuhler.formandfunction.containers.*">
+
+	<mx:Script>
+		<![CDATA[
+			import mx.utils.ObjectUtil;
+			import mx.rpc.events.ResultEvent;
+			import mx.managers.PopUpManager;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.controls.Alert;
+
+			private var styleSheet:StyleSheet;
+
+			private var urlLdr:URLLoader;
+
+			private var cssLoader:URLLoader;
+
+			public var fileSource:String;
+
+			private function handleClose(event:CloseEvent):void
+			{
+				closeWindow();
+			}
+
+			private function closeWindow():void
+			{
+				PopUpManager.removePopUp(this);
+			}
+
+			private function doEvent(evt:Event):void
+			{
+				switch (evt.type)
+				{
+					case Event.COMPLETE:
+						/* If the load was successful, create a URLVariables object from the URLLoader.data property and populate the paramColl ArrayCollection object. */
+						var ldr:URLLoader=evt.currentTarget as URLLoader;
+						var vars:URLVariables=new URLVariables(ldr.data);
+						textArea.htmlText=vars.content;
+						break;
+					case IOErrorEvent.IO_ERROR:
+						Alert.show('IO_ERROR');
+						break;
+					case SecurityErrorEvent.SECURITY_ERROR:
+						Alert.show('SecurityErrorEvent');
+						break;
+					case ProgressEvent.PROGRESS:
+						break;
+					case HTTPStatusEvent.HTTP_STATUS:
+						break;
+				}
+				getStyles();
+			}
+
+			private function getStyles():void
+			{
+				cssLoader=new URLLoader();
+				cssLoader.addEventListener(Event.COMPLETE, cssStylesLoadComplete);
+				cssLoader.load(new URLRequest("Styles.css"));
+			}
+
+			private function creationCompleteHandler(event:FlexEvent):void
+			{
+				urlLdr=new URLLoader();
+				urlLdr.dataFormat=URLLoaderDataFormat.TEXT;
+				urlLdr.addEventListener(Event.COMPLETE, doEvent);
+				urlLdr.addEventListener(Event.OPEN, doEvent);
+				urlLdr.addEventListener(HTTPStatusEvent.HTTP_STATUS, doEvent);
+				urlLdr.addEventListener(IOErrorEvent.IO_ERROR, doEvent);
+				urlLdr.addEventListener(ProgressEvent.PROGRESS, doEvent);
+				urlLdr.addEventListener(SecurityErrorEvent.SECURITY_ERROR, doEvent);
+				urlLdr.load(new URLRequest(fileSource));
+			}
+
+
+			private function textArea_link(evt:TextEvent):void
+			{
+				Alert.show("text: " + evt.text, "Panel");
+			}
+
+
+			private function cssStylesLoadComplete(evt:Event):void
+			{
+				var css:String=URLLoader(evt.currentTarget).data;
+				styleSheet=new StyleSheet();
+				styleSheet.parseCSS(css);
+				textArea.styleSheet=styleSheet;
+			}
+		]]>
+	</mx:Script>
+
+
+	<mx:TextArea id="textArea"
+				 editable="false"
+				 condenseWhite="true"
+				 width="100%"
+				 height="100%"
+				 link="textArea_link(event);"/>
+	<containers:BaseControlBar horizontalAlign="center">
+		<mx:Button label="Close"
+				   click="closeWindow();"/>
+	</containers:BaseControlBar>
+</mx:TitleWindow>

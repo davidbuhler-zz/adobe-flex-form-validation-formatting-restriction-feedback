@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+/*
+ * #%L
+ * GwtBootstrap3
+ * %%
+ * Copyright (C) 2013 FormFunction
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+ --> 
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+		 styleName="formHeader"
+		 width="100%"
+		 xmlns:containers="org.davidbuhler.containers.*">
+	<mx:Script>
+		<![CDATA[
+			private var _title:String;
+			private var _errorsCount:int;
+			private var _lastSaved:String='Never';
+
+			[Bindable]
+			private var errorSliceWidth:uint=0;
+
+			[Bindable]
+			public function get lastSaved():String
+			{
+				return this._lastSaved;
+			}
+
+			public function set lastSaved(value:String):void
+			{
+				this._lastSaved=value;
+			}
+
+			[Bindable]
+			public function get title():String
+			{
+				return this._title;
+			}
+
+			public function set title(value:String):void
+			{
+				this._title=value;
+			}
+
+			[Bindable]
+			public function get errorsCount():int
+			{
+				return this._errorsCount;
+			}
+
+
+			public function set errorsCount(value:int):void
+			{
+				this._errorsCount=value;
+				changeErrorSliceWidth();
+			}
+
+
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				changeErrorSliceWidth();
+			}
+
+
+			private function changeErrorSliceWidth():void
+			{
+				errorSliceWidth=(this.width / errorsCount);
+			}
+		]]>
+	</mx:Script>
+	<mx:Label text="{title}"
+			  styleName="sectionHeaderLabel"/>
+	<mx:Spacer height="100%"/>
+	<containers:ValidationErrorYardStick width="{errorsCount * 20}"
+										 resizeEffect="Resize"
+										 verticalAlign="bottom"
+										 horizontalAlign="right"
+										 visible="{errorsCount!=0}">
+		<mx:Label text="{errorsCount}"
+				  color="black"
+				  textAlign="center"/>
+		<mx:Box backgroundColor="0xcc1100"
+				height="2"
+				width="100%"/>
+	</containers:ValidationErrorYardStick>
+</mx:VBox>

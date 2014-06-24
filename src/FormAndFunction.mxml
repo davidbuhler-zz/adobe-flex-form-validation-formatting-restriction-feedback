@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!---
+/*
+ * #%L
+ * GwtBootstrap3
+ * %%
+ * Copyright (C) 2013 FormFunction
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+ --> 
+<mx:Application
+	height="100%"
+	width="100%" 
+	layout="absolute"
+	xmlns:containers="org.davidbuhler.formandfunction.containers.*"
+	xmlns:controls="org.davidbuhler.formandfunction.controls.*"
+	xmlns:formandfunction="org.davidbuhler.formandfunction.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:vo="org.davidbuhler.formandfunction.vo.*">
+	<mx:Style
+		source="/assets/styles/Styles.css"/>
+	<formandfunction:BaseForm
+		autoSaveEnabled="true"
+		autoSaveInterval="10000"
+		id="baseForm">
+		<controls:FormHeader
+			errorsCount="{baseForm.errorsCount}"
+			title="Form &amp; Function"/>
+		<formandfunction:BaseFormItem
+			id="email"
+			required="true"
+			type="email"/>
+		<formandfunction:BaseFormItem
+			id="password"
+			required="true"
+			type="password"/>
+		<formandfunction:BaseFormItem
+			id="radioButton"
+			radioButtonList="{radioButtonList}"
+			required="true"
+			type="radioButtonGroup"/>		
+		<controls:BaseHRule/>
+		<formandfunction:BaseFormItem
+			formatHint="Jane's 5K Run"
+			id="textInput"
+			label="Event Name"
+			maxLength="50"
+			minLength="5"
+			required="true"
+			type="textInput"/>
+		<formandfunction:BaseFormItem
+			id="firstName"
+			required="true"
+			type="firstName"/>
+		<formandfunction:BaseFormItem
+			id="lastName"
+			required="true"
+			type="lastName"/>
+		<formandfunction:BaseFormItem
+			id="address1"
+			required="true"
+			type="address1"/>
+		<formandfunction:BaseFormItem
+			id="address2"
+			required="true"
+			type="address2"/>
+		<formandfunction:BaseFormItem
+			id="comboBox"
+			label="State"
+			required="true"
+			type="comboBox"/>
+		<formandfunction:BaseFormItem
+			id="zipCode"
+			required="true"
+			type="zipCode"/>
+		<formandfunction:BaseFormItem
+			id="phoneNumber"
+			required="true"
+			type="phoneNumber"/>
+		<formandfunction:BaseFormItem
+			id="date"
+			required="true"
+			type="date"/>
+		<formandfunction:BaseFormItem
+			id="time"
+			required="true"
+			type="time"/>
+		<formandfunction:BaseFormItem
+			id="socialSecurity"
+			required="true"
+			type="socialSecurity"/>
+		<controls:BaseHRule/>
+		<formandfunction:BaseFormItem
+			excludeDinersClub="true"
+			id="creditCardType"
+			required="true"
+			type="creditCardType"
+			whatsThisURL="Legal.html"/>
+		<formandfunction:BaseFormItem
+			id="creditCardNumber"
+			required="true"
+			type="creditCardNumber"/>
+		<formandfunction:BaseFormItem
+			id="creditCardSecurityCode"
+			required="true"
+			type="creditCardSecurityCode"/>
+		<formandfunction:BaseFormItem
+			id="creditCardExpirationDate"
+			required="true"
+			type="creditCardExpirationDate"/>
+		<formandfunction:BaseFormItem
+			id="numericStepper"
+			required="true"
+			type="numericStepper"/>
+		<formandfunction:BaseFormItem
+			id="currency"
+			required="true"
+			type="currency"/>
+		<formandfunction:BaseFormItem
+			id="uri"
+			required="true"
+			type="uri"/>
+		<formandfunction:BaseFormItem
+			id="checkBox"
+			label="I agree"
+			openLinksInNewWindow="true"
+			required="true"
+			type="checkBox"
+			whatsThisURL="Sample.html"/>
+		<formandfunction:BaseFormItem
+			id="captcha"
+			required="true"
+			type="captcha"/>
+		<formandfunction:BaseFormItem
+			id="fileManager"
+			type="fileManager"/>
+		<formandfunction:BaseFormItem
+			id="richTextEditor"
+			label="Profile"
+			required="true"
+			type="richTextEditor"/>
+		<containers:BaseControlBar
+			width="100%">
+			<controls:ClearButton
+				enabled="{baseForm.isFormDirty}"/>
+			<controls:SaveButton
+				click="saveForm(event);"
+				enabled="{baseForm.isFormDirty &amp;&amp; baseForm.isFormValid}"
+				id="saveButton"
+				label="{saveButton.enabled &amp;&amp; baseForm.autoSaveEnabled?'Save':baseForm.lastSavedLabel}"/>
+		</containers:BaseControlBar>
+	</formandfunction:BaseForm>
+
+	<mx:Array
+		id="checkBoxList">
+		<vo:CheckBoxVO 
+			selected="true"
+			label="Large"/>
+		<vo:CheckBoxVO
+			label="Medium"/>
+		<vo:CheckBoxVO 
+			selected="true"
+			label="Small"/>			
+	</mx:Array>
+
+	<mx:Array
+		id="radioButtonList">
+		<vo:RadioButtonVO
+			label="Male"/>
+		<vo:RadioButtonVO
+			label="Female"/>
+	</mx:Array>
+
+	<mx:Script>
+		<![CDATA[
+			import org.davidbuhler.formandfunction.utils.Utils;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+
+
+			private function saveForm(event:Event):void
+			{
+				mx.controls.Alert.show('Values: ' + baseForm.formValues);
+			}
+		]]>
+	</mx:Script>
+</mx:Application>
